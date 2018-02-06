@@ -1,0 +1,5 @@
+
+$ conan install
+$ cmake .
+$ make
+
