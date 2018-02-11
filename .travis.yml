@@ -122,7 +122,7 @@ before_install:
   - gem install pdd
   - conan remote add bincrafter https://api.bintray.com/conan/bincrafters/public-conan
   - conan remote add dronmdf https://api.bintray.com/conan/mdf/2out
-  - conan install -s compiler.libcxx='libstdc++11' --build 2out .
+  - conan install . -s compiler.libcxx='libstdc++11' --build 2out
 
 script:
   - |
