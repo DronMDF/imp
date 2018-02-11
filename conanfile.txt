@@ -2,5 +2,5 @@
 cmake
 
 [requires]
-2out/0.4@dron/stable
+2out/0.4@dronmdf/stable
 asio/1.11.0@bincrafters/stable
