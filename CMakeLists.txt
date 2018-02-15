@@ -19,3 +19,9 @@ target_link_libraries(imp ${CMAKE_THREAD_LIBS_INIT} ${CONAN_LIBS})
 
 enable_testing()
 add_subdirectory(test)
+
+add_custom_target(
+	style
+	COMMAND ${CMAKE_SOURCE_DIR}/style.sh
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)

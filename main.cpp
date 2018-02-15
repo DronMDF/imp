@@ -1,3 +1,8 @@
+// Copyright (c) 2018 Andrey Valyaev <dron.valyaev@gmail.com>
+//
+// This software may be modified and distributed under the terms
+// of the MIT license.  See the LICENSE file for details.
+
 #include <functional>
 #include <memory>
 #include <asio.hpp>
@@ -7,8 +12,8 @@ using namespace std;
 class Session : public enable_shared_from_this<Session>
 {
 public:
-	Session(asio::ip::tcp::socket socket)
-		: socket(move(socket))
+	explicit Session(asio::ip::tcp::socket socket)
+		: socket(move(socket)), data(1024)
 	{
 	}
 
@@ -21,7 +26,7 @@ private:
 	void do_read()
 	{
 		socket.async_read_some(
-			asio::buffer(data_, max_length),
+			asio::buffer(&data[0], data.size()),
 			bind(&Session::handle_read, shared_from_this(), placeholders::_1, placeholders::_2)
 		);
 	}
@@ -38,7 +43,7 @@ private:
 		auto self(shared_from_this());
 		asio::async_write(
 			socket,
-			asio::buffer(data_, length),
+			asio::buffer(&data[0], length),
 			bind(&Session::handle_write, shared_from_this(), placeholders::_1, placeholders::_2)
 		);
 	}
@@ -51,14 +56,13 @@ private:
 	}
 
 	asio::ip::tcp::socket socket;
-	enum { max_length = 1024 };
-	char data_[max_length];
+	vector<uint8_t> data;
 };
 
 class Server {
 public:
-	Server(asio::io_service &service, in_port_t port)
-		: acceptor(service, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)), socket(service)
+	Server(asio::io_service *service, in_port_t port)
+		: acceptor(*service, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)), socket(*service)
 	{
 		do_accept();
 	}
@@ -85,6 +89,6 @@ private:
 int main(int, char **argv)
 {
 	asio::io_service service;
-	Server server(service, atoi(argv[1]));
+	Server server(&service, atoi(argv[1]));
 	service.run();
 }

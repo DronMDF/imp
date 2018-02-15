@@ -114,7 +114,7 @@ script:
   - |
     set -e
     cmake -DCMAKE_CXX_FLAGS="--coverage" .
-    #make style
+    make style
     make VERBOSE=1
     make test
 
