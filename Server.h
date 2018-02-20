@@ -5,6 +5,7 @@
 
 #pragma once
 #include <asio.hpp>
+#include "AsioAcceptor.h"
 
 class Server {
 public:
@@ -12,8 +13,10 @@ public:
 
 private:
 	void do_accept();
-	void handle_accept(std::error_code ec);
+	void handle_accept(
+		std::error_code ec,
+		const std::shared_ptr<asio::ip::tcp::socket> &socket
+	);
 
-	asio::ip::tcp::acceptor acceptor;
-	asio::ip::tcp::socket socket;
+	const std::shared_ptr<AsioAcceptor> acceptor;
 };

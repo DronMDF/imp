@@ -10,7 +10,7 @@
 class Session : public std::enable_shared_from_this<Session>
 {
 public:
-	explicit Session(asio::ip::tcp::socket socket);
+	explicit Session(const std::shared_ptr<asio::ip::tcp::socket> &socket);
 
 	void start();
 
@@ -20,7 +20,7 @@ private:
 	void do_write(size_t length);
 	void handle_write(std::error_code ec, size_t);
 
-	asio::ip::tcp::socket socket;
+	const std::shared_ptr<asio::ip::tcp::socket> socket;
 	std::vector<uint8_t> data;
 };
 

@@ -8,8 +8,8 @@
 
 using namespace std;
 
-Session::Session(asio::ip::tcp::socket socket)
-	: socket(move(socket)), data(1024)
+Session::Session(const shared_ptr<asio::ip::tcp::socket> &socket)
+	: socket(socket), data(1024)
 {
 }
 
@@ -20,7 +20,7 @@ void Session::start()
 
 void Session::do_read()
 {
-	socket.async_read_some(
+	socket->async_read_some(
 		asio::buffer(&data[0], data.size()),
 		bind(&Session::handle_read, shared_from_this(), placeholders::_1, placeholders::_2)
 	);
@@ -36,7 +36,7 @@ void Session::handle_read(error_code ec, size_t length)
 void Session::do_write(size_t length)
 {
 	asio::async_write(
-		socket,
+		*socket,
 		asio::buffer(&data[0], length),
 		bind(&Session::handle_write, shared_from_this(), placeholders::_1, placeholders::_2)
 	);

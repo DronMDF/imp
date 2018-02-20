@@ -10,20 +10,20 @@
 using namespace std;
 
 Server::Server(asio::io_service *service, in_port_t port)
-	: acceptor(*service, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)), socket(*service)
+	: acceptor(make_shared<AsioAcceptor>(service, port))
 {
 	do_accept();
 }
 
 void Server::do_accept()
 {
-	acceptor.async_accept(socket, bind(&Server::handle_accept, this, placeholders::_1));
+	acceptor->accept(bind(&Server::handle_accept, this, placeholders::_1, placeholders::_2));
 }
 
-void Server::handle_accept(error_code ec)
+void Server::handle_accept(error_code ec, const shared_ptr<asio::ip::tcp::socket> &socket)
 {
 	if (!ec) {
-		make_shared<Session>(move(socket))->start();
+		make_shared<Session>(socket)->start();
 	}
 
 	do_accept();

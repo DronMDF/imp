@@ -9,6 +9,7 @@ conan_basic_setup()
 
 add_executable(
 	imp
+	AsioAcceptor.cpp
 	main.cpp
 	Server.cpp
 	Session.cpp
