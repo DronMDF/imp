@@ -7,7 +7,13 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 find_package(Threads)
 conan_basic_setup()
 
-add_executable(imp main.cpp)
+add_executable(
+	imp
+	main.cpp
+	Server.cpp
+	Session.cpp
+)
+
 set_target_properties(
 	imp
 	PROPERTIES
