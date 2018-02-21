@@ -4,13 +4,16 @@
 // of the MIT license.  See the LICENSE file for details.
 
 #include "AsioService.h"
-#include "Server.h"
+#include "AsioAcceptor.h"
 
 using namespace std;
 
-int main(int, char **argv)
+shared_ptr<AsioAcceptor> AsioService::createAcceptor(in_port_t port)
 {
-	auto service = make_shared<AsioService>();
-	Server server(service->createAcceptor(atoi(argv[1])));
-	service->run();
+	return make_shared<AsioAcceptor>(&service, port);
+}
+
+void AsioService::run()
+{
+	service.run();
 }

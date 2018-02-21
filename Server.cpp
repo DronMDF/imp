@@ -9,8 +9,8 @@
 
 using namespace std;
 
-Server::Server(asio::io_service *service, in_port_t port)
-	: acceptor(make_shared<AsioAcceptor>(service, port))
+Server::Server(const shared_ptr<AsioAcceptor> &acceptor)
+	: acceptor(acceptor)
 {
 	do_accept();
 }

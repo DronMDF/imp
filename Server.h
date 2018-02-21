@@ -9,7 +9,7 @@
 
 class Server {
 public:
-	Server(asio::io_service *service, in_port_t port);
+	explicit Server(const std::shared_ptr<AsioAcceptor> &acceptor);
 
 private:
 	void do_accept();
