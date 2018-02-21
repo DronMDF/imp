@@ -10,7 +10,12 @@ using namespace std;
 
 shared_ptr<AsioAcceptor> AsioService::createAcceptor(in_port_t port)
 {
-	return make_shared<AsioAcceptor>(&service, port);
+	return make_shared<AsioAcceptor>(
+		make_shared<asio::ip::tcp::acceptor>(
+			service,
+			asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)
+		)
+	);
 }
 
 void AsioService::run()

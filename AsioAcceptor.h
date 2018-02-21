@@ -10,7 +10,7 @@
 
 class AsioAcceptor {
 public:
-	AsioAcceptor(asio::io_service *service, in_port_t port);
+	explicit AsioAcceptor(const std::shared_ptr<asio::ip::tcp::acceptor> &acceptor);
 
 	void accept(
 		const std::function<
@@ -19,5 +19,5 @@ public:
 	);
 
 private:
-	asio::ip::tcp::acceptor acceptor;
+	const std::shared_ptr<asio::ip::tcp::acceptor> acceptor;
 };
